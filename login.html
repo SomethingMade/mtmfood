@@ -93,7 +93,7 @@
         const snapshot = await userRef.get();
 
         if (snapshot.exists() && snapshot.val().accountType === "business") {
-          window.location.href = "index.html";
+          window.location.href = "admin.html";
         } else {
           loginError.textContent = "Access denied. You must be a business account.";
           await auth.signOut();
