@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Restaurant Owner Login</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+  <style>
+    .spinner {
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-top: 4px solid #ffffff;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+
+  <!-- Spinner Overlay -->
+  <div id="spinner-overlay" class="fixed inset-0 bg-orange-500 bg-opacity-90 flex items-center justify-center z-50 hidden">
+    <div class="spinner"></div>
+  </div>
+
+  <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md relative z-10">
+    <h2 class="text-2xl font-bold mb-6 text-center text-orange-600">Restaurant Owner Login</h2>
+
+    <div class="space-y-4">
+      <input id="email" type="email" placeholder="Email" class="w-full px-4 py-2 border rounded-full" />
+      <input id="password" type="password" placeholder="Password" class="w-full px-4 py-2 border rounded-full" />
+    </div>
+
+    <p id="login-error" class="text-red-600 mt-2 text-sm"></p>
+
+    <button id="login-btn" class="mt-6 w-full bg-orange-500 text-white font-semibold py-2 rounded-full hover:bg-orange-600">
+      Log In
+    </button>
+
+    <p class="text-sm mt-4 text-center">Don't have an account? 
+      <a href="signup.html" class="text-orange-500 underline">Sign up</a>
+    </p>
+  </div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBOyZ3As4GTuNvjemvPF_SpsC6m6vqtNhc",
+      authDomain: "fire-b-a8878.firebaseapp.com",
+      databaseURL: "https://fire-b-a8878.firebaseio.com",
+      projectId: "fire-b-a8878",
+      storageBucket: "fire-b-a8878.appspot.com",
+      messagingSenderId: "658673187627",
+      appId: "1:658673187627:web:6e4c29af661785f0afa36e",
+      measurementId: "G-V4W97VMSKL"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.database();
+
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const loginBtn = document.getElementById("login-btn");
+    const loginError = document.getElementById("login-error");
+    const spinnerOverlay = document.getElementById("spinner-overlay");
+
+    loginBtn.addEventListener("click", async () => {
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+
+      loginError.textContent = "";
+
+      if (!email || !password) {
+        loginError.textContent = "Please enter both email and password.";
+        return;
+      }
+
+      spinnerOverlay.classList.remove("hidden");
+
+      try {
+        const result = await auth.signInWithEmailAndPassword(email, password);
+
+        const userRef = db.ref("users/" + result.user.uid);
+        const snapshot = await userRef.get();
+
+        if (snapshot.exists() && snapshot.val().accountType === "business") {
+          window.location.href = "index.html";
+        } else {
+          loginError.textContent = "Access denied. You must be a business account.";
+          await auth.signOut();
+        }
+      } catch (error) {
+        loginError.textContent = error.message;
+      } finally {
+        spinnerOverlay.classList.add("hidden");
+      }
+    });
+  </script>
+</body>
+</html>
