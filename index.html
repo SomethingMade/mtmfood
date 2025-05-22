@@ -87,10 +87,15 @@
 
     const ordersContainer = document.getElementById("orders");
 
-    auth.onAuthStateChanged(user => {
-      if (user) {
-        const restaurantRef = db.ref("restaurants/" + user.uid);
-        const menuRef = db.ref("menu/" + user.uid);
+   auth.onAuthStateChanged(user => {
+  if (!user) {
+    window.location.href = "signup.html"; // redirect to signup if not authenticated
+    return;
+  }
+
+  const restaurantRef = db.ref("restaurants/" + user.uid);
+  const menuRef = db.ref("menu/" + user.uid);
+  const ordersRef = db.ref("orders");
 
         // Load existing restaurant info
         restaurantRef.once("value", snapshot => {
