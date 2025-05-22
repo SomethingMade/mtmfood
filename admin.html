@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Restaurant Admin Panel</title>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 p-6">
+  <div class="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-md">
+    <h1 class="text-2xl font-bold mb-6">Restaurant Admin Panel</h1>
+
+    <!-- Error Message -->
+    <div id="error-message" class="text-red-500 mb-4 hidden"></div>
+
+    <!-- Restaurant Info -->
+    <div class="space-y-4 mb-6">
+      <!-- Total Revenue -->
+<div class="p-4 bg-green-100 text-green-800 font-semibold rounded mb-4" id="revenue">
+  Total Revenue: R0
+</div>
+
+      <input id="restaurant-name" type="text" placeholder="Restaurant Name" class="w-full p-2 border rounded" />
+      <textarea id="restaurant-description" placeholder="Description" class="w-full p-2 border rounded"></textarea>
+      <input id="restaurant-image" type="text" placeholder="Image URL" class="w-full p-2 border rounded" />
+      <input id="restaurant-type" type="text" placeholder="Type (e.g., Vegan, BBQ)" class="w-full p-2 border rounded" />
+      <input id="restaurant-location" type="text" placeholder="Location (e.g., Ikeja, Lagos)" class="w-full p-2 border rounded" />
+      <button id="save-restaurant" class="bg-blue-500 text-white px-4 py-2 rounded">Save Restaurant Info</button>
+    </div>
+
+    <!-- Menu Management -->
+    <h2 class="text-xl font-semibold mb-2">Add Menu Item</h2>
+    <div class="space-y-3 mb-6">
+      <input id="item-name" type="text" placeholder="Item Name" class="w-full p-2 border rounded" />
+      <input id="item-price" type="number" placeholder="Price" class="w-full p-2 border rounded" />
+      <input id="item-image" type="text" placeholder="Image URL" class="w-full p-2 border rounded" />
+      <select id="item-availability" class="w-full p-2 border rounded">
+        <option value="available">Available</option>
+        <option value="unavailable">Unavailable</option>
+      </select>
+      <button id="add-item" class="bg-green-500 text-white px-4 py-2 rounded">Add Item</button>
+    </div>
+
+    <!-- Menu Items Display -->
+    <div id="menu-items" class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6"></div>
+
+    <!-- Orders Section -->
+    <h2 class="text-xl font-semibold mb-2">Incoming Orders</h2>
+    <div id="orders" class="space-y-3 bg-gray-50 p-4 rounded-lg shadow-inner"></div>
+  </div>
+
+  <!-- Firebase Script -->
+  <script>
+    // Firebase config (replace with your actual config)
+     const firebaseConfig = {
+      apiKey: "AIzaSyBOyZ3As4GTuNvjemvPF_SpsC6m6vqtNhc",
+      authDomain: "fire-b-a8878.firebaseapp.com",
+      databaseURL: "https://fire-b-a8878.firebaseio.com",
+      projectId: "fire-b-a8878",
+      storageBucket: "fire-b-a8878.appspot.com",
+      messagingSenderId: "658673187627",
+      appId: "1:658673187627:web:6e4c29af661785f0afa36e",
+      measurementId: "G-V4W97VMSKL"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.database();
+
+    const nameInput = document.getElementById("restaurant-name");
+    const descInput = document.getElementById("restaurant-description");
+    const imageInput = document.getElementById("restaurant-image");
+    const typeInput = document.getElementById("restaurant-type");
+    const locationInput = document.getElementById("restaurant-location");
+    const saveButton = document.getElementById("save-restaurant");
+    const menuContainer = document.getElementById("menu-items");
+    const errorMessage = document.getElementById("error-message");
+
+    const itemName = document.getElementById("item-name");
+    const itemPrice = document.getElementById("item-price");
+    const itemImage = document.getElementById("item-image");
+    const itemAvailability = document.getElementById("item-availability");
+    const addItemButton = document.getElementById("add-item");
+
+    const ordersContainer = document.getElementById("orders");
+
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        const restaurantRef = db.ref("restaurants/" + user.uid);
+        const menuRef = db.ref("menu/" + user.uid);
+
+        // Load existing restaurant info
+        restaurantRef.once("value", snapshot => {
+          const data = snapshot.val();
+          if (data) {
+            nameInput.value = data.name || "";
+            descInput.value = data.description || "";
+            imageInput.value = data.image || "";
+            typeInput.value = data.type || "";
+            locationInput.value = data.location || "";
+          }
+        });
+
+        // Save restaurant info
+        saveButton.onclick = () => {
+          restaurantRef.set({
+            name: nameInput.value,
+            description: descInput.value,
+            image: imageInput.value,
+            type: typeInput.value,
+            location: locationInput.value,
+            userId: user.uid
+          });
+        };
+
+        // Add menu item
+        addItemButton.onclick = () => {
+          const newItemRef = menuRef.push();
+          newItemRef.set({
+            name: itemName.value,
+            price: parseFloat(itemPrice.value),
+            image: itemImage.value,
+            availability: itemAvailability.value
+          });
+        };
+
+const revenueDiv = document.getElementById("revenue");
+
+// Load and display menu with delete buttons
+menuRef.on("value", snapshot => {
+  menuContainer.innerHTML = "";
+  snapshot.forEach(child => {
+    const item = child.val();
+    const itemKey = child.key;
+
+    const div = document.createElement("div");
+    div.className = "p-4 border rounded bg-white shadow relative";
+
+    div.innerHTML = `
+      <img src="${item.image}" alt="${item.name}" class="w-full h-32 object-cover rounded mb-2">
+      <h3 class="font-bold">${item.name}</h3>
+      <p>R${item.price}</p>
+      <p class="text-sm">${item.availability}</p>
+      <button class="delete-btn mt-2 bg-red-500 text-white px-3 py-1 rounded">Delete</button>
+    `;
+
+    const deleteBtn = div.querySelector(".delete-btn");
+    deleteBtn.onclick = () => {
+      if (confirm(`Are you sure you want to delete "${item.name}"?`)) {
+        menuRef.child(itemKey).remove();
+      }
+    };
+
+    menuContainer.appendChild(div);
+  });
+});
+
+// Fetch and calculate total revenue
+ordersRef.on("value", snapshot => {
+  let totalRevenue = 0;
+  snapshot.forEach(child => {
+    const order = child.val();
+    if (order.restaurantId === user.uid) {
+      totalRevenue += order.total || 0;
+    }
+  });
+  revenueDiv.textContent = `Total Revenue: R${totalRevenue.toLocaleString()}`;
+});
+
+
+
+        // Fetch and display orders for this restaurant
+        const ordersRef = db.ref("orders");
+        ordersRef.orderByChild("restaurantId").equalTo(user.uid).on("value", snapshot => {
+          ordersContainer.innerHTML = "";
+          if (!snapshot.exists()) {
+            ordersContainer.innerHTML = "<p class='text-gray-500'>No orders yet.</p>";
+            return;
+          }
+
+          snapshot.forEach(orderSnap => {
+            const order = orderSnap.val();
+            const orderDiv = document.createElement("div");
+            orderDiv.className = "border p-3 rounded-md bg-white";
+
+            let itemsHTML = "";
+            if (order.items && Array.isArray(order.items)) {
+              itemsHTML = order.items.map(item =>
+                `<li>${item.name} x ${item.quantity} - ₦${item.price}</li>`
+              ).join("");
+            }
+
+            orderDiv.innerHTML = `
+              <p class="font-semibold">Order ID: ${orderSnap.key}</p>
+              <p><strong>Customer:</strong> ${order.customerName || 'N/A'}</p>
+              <p><strong>Time:</strong> ${new Date(order.timestamp || Date.now()).toLocaleString()}</p>
+              <ul class="list-disc ml-4 my-2">${itemsHTML}</ul>
+              <p class="font-semibold">Total: ₦${order.total || '0.00'}</p>
+            `;
+            ordersContainer.appendChild(orderDiv);
+          });
+        });
+
+      } else {
+        errorMessage.textContent = "Please log in to access the admin panel.";
+        errorMessage.classList.remove("hidden");
+      }
+    });
+  </script>
+</body>
+</html>
