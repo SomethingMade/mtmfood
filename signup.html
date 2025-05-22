@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>List Your Restaurant | My Two Minutes Food</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+</head>
+<body class="h-screen bg-gray-100">
+
+  <div class="flex flex-col md:flex-row h-full">
+    
+    <!-- Left Side: Form -->
+    <div class="md:w-1/2 p-10 flex items-center justify-center">
+      <div class="w-full max-w-md">
+        <h1 class="text-3xl font-bold mb-4 text-orange-600">Partner with My Two Minutes Food</h1>
+        <p class="mb-6 text-gray-600">
+          Join our platform and reach thousands of hungry customers. Fill out the form below to get started!
+        </p>
+
+        <form id="signup-form" class="space-y-4">
+          <input id="restaurantName" type="text" placeholder="Restaurant Name" class="w-full px-4 py-2 border rounded-full" required />
+          <input id="location" type="text" placeholder="Restaurant Address/Location" class="w-full px-4 py-2 border rounded-full" required />
+          <textarea id="description" placeholder="Restaurant Description" class="w-full px-4 py-2 border rounded-xl" required></textarea>
+          <input id="contact" type="text" placeholder="Phone Number / Contact Info" class="w-full px-4 py-2 border rounded-full" required />
+          <input id="email" type="email" placeholder="Email" class="w-full px-4 py-2 border rounded-full" required />
+          <input id="password" type="password" placeholder="Password" class="w-full px-4 py-2 border rounded-full" required />
+
+          <p id="error-msg" class="text-red-500 text-sm"></p>
+          <p id="success-msg" class="text-green-600 text-sm"></p>
+
+          <button type="submit" class="w-full bg-orange-500 text-white py-2 rounded-full hover:bg-orange-600 font-semibold">
+            Submit and Create Account
+          </button>
+        </form>
+
+        <p class="text-sm mt-4 text-center">Already listed? 
+          <a href="login.html" class="text-orange-600 underline">Log in here</a>
+        </p>
+      </div>
+    </div>
+
+    <!-- Right Side: Background Image -->
+    <div class="hidden md:block md:w-1/2 h-full bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1600891964599-f61ba0e24092');">
+      <!-- You can replace this URL with your own restaurant image -->
+    </div>
+  </div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBOyZ3As4GTuNvjemvPF_SpsC6m6vqtNhc",
+      authDomain: "fire-b-a8878.firebaseapp.com",
+      databaseURL: "https://fire-b-a8878.firebaseio.com",
+      projectId: "fire-b-a8878",
+      storageBucket: "fire-b-a8878.appspot.com",
+      messagingSenderId: "658673187627",
+      appId: "1:658673187627:web:6e4c29af661785f0afa36e",
+      measurementId: "G-V4W97VMSKL"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.database();
+
+    const signupForm = document.getElementById("signup-form");
+    const errorMsg = document.getElementById("error-msg");
+    const successMsg = document.getElementById("success-msg");
+
+    signupForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      errorMsg.textContent = "";
+      successMsg.textContent = "";
+
+      const restaurantName = document.getElementById("restaurantName").value.trim();
+      const location = document.getElementById("location").value.trim();
+      const description = document.getElementById("description").value.trim();
+      const contact = document.getElementById("contact").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      if (!restaurantName || !location || !description || !contact || !email || !password) {
+        errorMsg.textContent = "All fields are required.";
+        return;
+      }
+
+      try {
+        const result = await auth.createUserWithEmailAndPassword(email, password);
+        const uid = result.user.uid;
+
+        await db.ref("users/" + uid).set({
+          accountType: "business",
+          email: email
+        });
+
+        await db.ref("restaurants/" + uid).set({
+          restaurantName,
+          location,
+          description,
+          contact,
+          email,
+          ownerId: uid
+        });
+
+        successMsg.textContent = "Restaurant submitted successfully! Redirecting...";
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 2000);
+      } catch (error) {
+        errorMsg.textContent = error.message;
+      }
+    });
+  </script>
+
+</body>
+</html>
