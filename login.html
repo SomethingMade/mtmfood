@@ -3,12 +3,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Restaurant Owner Login</title>
+  <title>Restaurant Owner Login | My Two Minutes Food</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+    .bg-gradient {
+      background: linear-gradient(135deg, #f97316 0%, #f59e0b 100%);
+    }
+    .input-icon {
+      position: relative;
+    }
+    .input-icon svg {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      color: #6b7280;
+    }
+    .input-icon input {
+      padding-left: 40px;
+    }
     .spinner {
       border: 4px solid rgba(255, 255, 255, 0.3);
       border-top: 4px solid #ffffff;
@@ -17,7 +39,6 @@
       height: 48px;
       animation: spin 1s linear infinite;
     }
-
     @keyframes spin {
       to {
         transform: rotate(360deg);
@@ -25,31 +46,80 @@
     }
   </style>
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+<body class="bg-gray-50">
 
-  <!-- Spinner Overlay -->
-  <div id="spinner-overlay" class="fixed inset-0 bg-orange-500 bg-opacity-90 flex items-center justify-center z-50 hidden">
-    <div class="spinner"></div>
-  </div>
+  <!-- Header -->
+  <header class="bg-white shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex justify-between items-center">
+      <h1 class="text-2xl font-bold text-orange-600">My Two Minutes Food</h1>
+      <a href="index.html" class="text-orange-600 hover:text-orange-700 font-medium flex items-center">
+        <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+        </svg>
+        Sign Up
+      </a>
+    </div>
+  </header>
 
-  <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md relative z-10">
-    <h2 class="text-2xl font-bold mb-6 text-center text-orange-600">Restaurant Owner Login</h2>
-
-    <div class="space-y-4">
-      <input id="email" type="email" placeholder="Email" class="w-full px-4 py-2 border rounded-full" />
-      <input id="password" type="password" placeholder="Password" class="w-full px-4 py-2 border rounded-full" />
+  <!-- Main Content -->
+  <div class="min-h-screen flex items-center justify-center bg-gradient py-12">
+    <!-- Spinner Overlay -->
+    <div id="spinner-overlay" class="fixed inset-0 bg-orange-500 bg-opacity-90 flex items-center justify-center z-50 hidden">
+      <div class="spinner"></div>
     </div>
 
-    <p id="login-error" class="text-red-600 mt-2 text-sm"></p>
+    <div class="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md relative z-10">
+      <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center flex items-center justify-center">
+        <svg class="w-6 h-6 text-orange-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+        </svg>
+        Restaurant Owner Login
+      </h2>
 
-    <button id="login-btn" class="mt-6 w-full bg-orange-500 text-white font-semibold py-2 rounded-full hover:bg-orange-600">
-      Log In
-    </button>
+      <form id="login-form" class="space-y-5">
+        <div class="input-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+          </svg>
+          <input id="email" type="email" placeholder="Email" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500" required />
+        </div>
+        <div class="input-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0-1.104-.896-2-2-2s-2 .896-2 2v6c0 1.104.896 2 2 2h6c1.104 0 2-.896 2-2v-6c0-1.104-.896-2-2-2h-6z"/>
+          </svg>
+          <input id="password" type="password" placeholder="Password" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500" required />
+        </div>
 
-    <p class="text-sm mt-4 text-center">Don't have an account? 
-      <a href="index.html" class="text-orange-500 underline">Sign up</a>
-    </p>
+        <p id="login-error" class="text-red-500 text-sm text-center mt-2"></p>
+
+        <button id="login-btn" type="submit" class="w-full bg-orange-600 text-white py-3 rounded-lg hover:bg-orange-700 font-semibold transition flex items-center justify-center">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14"/>
+          </svg>
+          Log In
+        </button>
+      </form>
+
+      <p class="text-sm text-center text-gray-600 mt-6 flex items-center justify-center">
+        <svg class="w-5 h-5 text-orange-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+        </svg>
+        Don't have an account? <a href="index.html" class="text-orange-600 underline hover:text-orange-700 ml-1">Sign up</a>
+      </p>
+    </div>
   </div>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white py-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <p>© 2025 My Two Minutes Food. All rights reserved.</p>
+      <p class="mt-2">
+        <a href="/terms" class="text-orange-400 hover:text-orange-500 mx-2">Terms</a> |
+        <a href="/privacy" class="text-orange-400 hover:text-orange-500 mx-2">Privacy</a> |
+        <a href="/contact" class="text-orange-400 hover:text-orange-500 mx-2">Contact</a>
+      </p>
+    </div>
+  </footer>
 
   <script>
     const firebaseConfig = {
@@ -67,13 +137,15 @@
     const auth = firebase.auth();
     const db = firebase.database();
 
+    const loginForm = document.getElementById("login-form");
     const emailInput = document.getElementById("email");
     const passwordInput = document.getElementById("password");
     const loginBtn = document.getElementById("login-btn");
     const loginError = document.getElementById("login-error");
     const spinnerOverlay = document.getElementById("spinner-overlay");
 
-    loginBtn.addEventListener("click", async () => {
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
       const email = emailInput.value.trim();
       const password = passwordInput.value;
 
@@ -104,6 +176,6 @@
         spinnerOverlay.classList.add("hidden");
       }
     });
-  </script>
+  </ scriptural>
 </body>
 </html>
