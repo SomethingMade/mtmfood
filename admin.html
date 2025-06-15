@@ -26,37 +26,37 @@
     </form>
   </section>
 
-  <!-- Restaurant Registration -->
-  <section id="restaurantSection" class="container mx-auto my-6 p-6 bg-white rounded shadow" style="display:none;">
-    <h2 class="text-xl font-bold mb-4">Register Your Restaurant</h2>
-    <form id="registerRestaurantForm" class="space-y-4">
-      <input id="restaurantName" class="w-full p-3 border rounded" placeholder="Restaurant Name" required />
-      <input id="restaurantImage" class="w-full p-3 border rounded" placeholder="Image URL" required />
-      <textarea id="restaurantDescription" class="w-full p-3 border rounded" placeholder="Description" required></textarea>
-      <input id="restaurantLocation" class="w-full p-3 border rounded" placeholder="Location" required />
-      <input id="restaurantCategory" class="w-full p-3 border rounded" placeholder="Category (e.g., Pizza, Burgers)" required />
-      <input id="restaurantDeliveryFee" type="number" step="0.01" class="w-full p-3 border rounded" placeholder="Delivery Fee (R)" required />
+  <!-- Business Registration -->
+  <section id="businessSection" class="container mx-auto my-6 p-6 bg-white rounded shadow" style="display:none;">
+    <h2 class="text-xl font-bold mb-4" id="registerBusinessTitle">Register Your Business</h2>
+    <form id="registerBusinessForm" class="space-y-4">
+      <input id="businessName" class="w-full p-3 border rounded" placeholder="Business Name" required />
+      <input id="businessImage" class="w-full p-3 border rounded" placeholder="Image URL" required />
+      <textarea id="businessDescription" class="w-full p-3 border rounded" placeholder="Description" required></textarea>
+      <input id="businessLocation" class="w-full p-3 border rounded" placeholder="Location" required />
+      <input id="businessCategory" class="w-full p-3 border rounded" placeholder="Category (e.g., Pizza, Groceries)" required />
+      <input id="businessDeliveryFee" type="number" step="0.01" class="w-full p-3 border rounded" placeholder="Delivery Fee (R)" required />
       <label class="flex items-center">
-        <input id="restaurantIsAvailable" type="checkbox" class="mr-2" checked />
-        <span>Restaurant Available</span>
+        <input id="businessIsAvailable" type="checkbox" class="mr-2" checked />
+        <span>Business Available</span>
       </label>
       <button type="submit" class="w-full bg-orange-500 text-white py-3 rounded">Register</button>
     </form>
   </section>
 
-  <!-- Edit Restaurant -->
-  <section id="editRestaurantSection" class="container mx-auto my-6 p-6 bg-white rounded shadow" style="display:none;">
-    <h2 class="text-xl font-bold mb-4">Edit Restaurant Details</h2>
-    <form id="editRestaurantForm" class="space-y-4">
-      <input id="editRestaurantName" class="w-full p-3 border rounded" placeholder="Restaurant Name" required />
-      <input id="editRestaurantImage" class="w-full p-3 border rounded" placeholder="Image URL" required />
-      <textarea id="editRestaurantDescription" class="w-full p-3 border rounded" placeholder="Description" required></textarea>
-      <input id="editRestaurantLocation" class="w-full p-3 border rounded" placeholder="Location" required />
-      <input id="editRestaurantCategory" class="w-full p-3 border rounded" placeholder="Category (e.g., Pizza, Burgers)" required />
-      <input id="editRestaurantDeliveryFee" type="number" step="0.01" class="w-full p-3 border rounded" placeholder="Delivery Fee (R)" required />
+  <!-- Edit Business -->
+  <section id="editBusinessSection" class="container mx-auto my-6 p-6 bg-white rounded shadow" style="display:none;">
+    <h2 class="text-xl font-bold mb-4" id="editBusinessTitle">Edit Business Details</h2>
+    <form id="editBusinessForm" class="space-y-4">
+      <input id="editBusinessName" class="w-full p-3 border rounded" placeholder="Business Name" required />
+      <input id="editBusinessImage" class="w-full p-3 border rounded" placeholder="Image URL" required />
+      <textarea id="editBusinessDescription" class="w-full p-3 border rounded" placeholder="Description" required></textarea>
+      <input id="editBusinessLocation" class="w-full p-3 border rounded" placeholder="Location" required />
+      <input id="editBusinessCategory" class="w-full p-3 border rounded" placeholder="Category (e.g., Pizza, Groceries)" required />
+      <input id="editBusinessDeliveryFee" type="number" step="0.01" class="w-full p-3 border rounded" placeholder="Delivery Fee (R)" required />
       <label class="flex items-center">
-        <input id="editRestaurantIsAvailable" type="checkbox" class="mr-2" />
-        <span>Restaurant Available</span>
+        <input id="editBusinessIsAvailable" type="checkbox" class="mr-2" />
+        <span>Business Available</span>
       </label>
       <button type="submit" class="w-full bg-orange-500 text-white py-3 rounded">Save Changes</button>
     </form>
@@ -93,10 +93,10 @@
 
   <!-- Menu Management -->
   <section id="menuSection" class="container mx-auto my-6 p-6 bg-white rounded shadow" style="display:none;">
-    <div id="restaurantInfo" class="mb-6"></div>
-    <h2 class="text-xl font-bold mb-4">Add Menu Item</h2>
+    <div id="businessInfo" class="mb-6"></div>
+    <h2 class="text-xl font-bold mb-4">Add Menu/Item</h2>
     <form id="addMenuForm" class="space-y-4">
-      <input id="itemName" class="w-full p-3 border rounded" placeholder="Dish Name" required />
+      <input id="itemName" class="w-full p-3 border rounded" placeholder="Item Name" required />
       <input id="itemPrice" type="number" step="0.01" class="w-full p-3 border rounded" placeholder="Price (R)" required />
       <input id="itemCategory" class="w-full p-3 border rounded" placeholder="Category" required />
       <input id="itemImage" class="w-full p-3 border rounded" placeholder="Image URL" required />
@@ -105,9 +105,9 @@
         <input id="itemIsAvailable" type="checkbox" class="mr-2" checked />
         <span>Item Available</span>
       </label>
-      <button type="submit" class="w-full bg-orange-500 text-white py-3 rounded">Add Menu Item</button>
+      <button type="submit" class="w-full bg-orange-500 text-white py-3 rounded">Add Item</button>
     </form>
-    <input id="searchMenu" type="text" placeholder="Search menu..." class="w-full mt-6 p-3 border rounded" />
+    <input id="searchMenu" type="text" placeholder="Search menu/items..." class="w-full mt-6 p-3 border rounded" />
     <div id="menuItemsList" class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
   </section>
 
@@ -149,6 +149,7 @@
     const auth = getAuth();
 
     let currentUserId = null;
+    let accountType = null;
     let orderChart = null;
 
     // Toast helper
@@ -180,38 +181,52 @@
     onAuthStateChanged(auth, (user) => {
       if (user) {
         currentUserId = user.uid;
-        document.getElementById("loginSection").style.display = "none";
-        loadRestaurant();
+        loadAccountType();
       } else {
         currentUserId = null;
+        accountType = null;
         document.getElementById("loginSection").style.display = "block";
-        document.getElementById("restaurantSection").style.display = "none";
-        document.getElementById("editRestaurantSection").style.display = "none";
+        document.getElementById("businessSection").style.display = "none";
+        document.getElementById("editBusinessSection").style.display = "none";
         document.getElementById("menuSection").style.display = "none";
         document.getElementById("ordersSection").style.display = "none";
         document.getElementById("dashboardSection").style.display = "none";
       }
     });
 
-    // Load restaurant info or registration form
-    function loadRestaurant() {
-      const restaurantRef = ref(db, `restaurants/${currentUserId}`);
-      onValue(restaurantRef, (snapshot) => {
+    // Load account type and business info
+    function loadAccountType() {
+      const userRef = ref(db, `users/${currentUserId}`);
+      onValue(userRef, (snapshot) => {
         const data = snapshot.val();
         if (data) {
-          document.getElementById("restaurantSection").style.display = "none";
-          document.getElementById("editRestaurantSection").style.display = "block";
+          accountType = data.accountType;
+          document.getElementById("registerBusinessTitle").textContent = `Register Your ${accountType === "business" ? "Business" : accountType.charAt(0).toUpperCase() + accountType.slice(1)}`;
+          document.getElementById("editBusinessTitle").textContent = `Edit ${accountType === "business" ? "Business" : accountType.charAt(0).toUpperCase() + accountType.slice(1)} Details`;
+          loadBusiness();
+        }
+      }, { onlyOnce: true });
+    }
+
+    // Load business info or registration form
+    function loadBusiness() {
+      const businessRef = ref(db, `${accountType === "restaurant" ? "restaurants" : "shops"}/${currentUserId}`);
+      onValue(businessRef, (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+          document.getElementById("businessSection").style.display = "none";
+          document.getElementById("editBusinessSection").style.display = "block";
           document.getElementById("menuSection").style.display = "block";
           document.getElementById("ordersSection").style.display = "block";
           document.getElementById("dashboardSection").style.display = "block";
-          displayRestaurantInfo(data);
-          populateEditRestaurantForm(data);
+          displayBusinessInfo(data);
+          populateEditBusinessForm(data);
           loadMenuItems();
           loadOrders();
           loadDashboardStats();
         } else {
-          document.getElementById("restaurantSection").style.display = "block";
-          document.getElementById("editRestaurantSection").style.display = "none";
+          document.getElementById("businessSection").style.display = "block";
+          document.getElementById("editBusinessSection").style.display = "none";
           document.getElementById("menuSection").style.display = "none";
           document.getElementById("ordersSection").style.display = "none";
           document.getElementById("dashboardSection").style.display = "none";
@@ -219,71 +234,73 @@
       }, { onlyOnce: true });
     }
 
-    // Register restaurant form
-    document.getElementById("registerRestaurantForm").addEventListener('submit', e => {
+    // Register business form
+    document.getElementById("registerBusinessForm").addEventListener('submit', e => {
       e.preventDefault();
-      const name = document.getElementById("restaurantName").value.trim();
-      const image = document.getElementById("restaurantImage").value.trim();
-      const description = document.getElementById("restaurantDescription").value.trim();
-      const location = document.getElementById("restaurantLocation").value.trim();
-      const category = document.getElementById("restaurantCategory").value.trim();
-      const deliveryFee = parseFloat(document.getElementById("restaurantDeliveryFee").value);
-      const isAvailable = document.getElementById("restaurantIsAvailable").checked;
+      const name = document.getElementById("businessName").value.trim();
+      const image = document.getElementById("businessImage").value.trim();
+      const description = document.getElementById("businessDescription").value.trim();
+      const location = document.getElementById("businessLocation").value.trim();
+      const category = document.getElementById("businessCategory").value.trim();
+      const deliveryFee = parseFloat(document.getElementById("businessDeliveryFee").value);
+      const isAvailable = document.getElementById("businessIsAvailable").checked;
 
       if (!name || !image || !description || !location || !category || isNaN(deliveryFee)) {
         alert("Please fill all fields correctly.");
         return;
       }
 
-      set(ref(db, `restaurants/${currentUserId}`), {
+      const businessRef = accountType === "restaurant" ? "restaurants" : "shops";
+      set(ref(db, `${businessRef}/${currentUserId}`), {
         name, image, description, location, category, deliveryFee, isAvailable
       }).then(() => {
-        toast("Restaurant registered!");
-        loadRestaurant();
+        toast(`${accountType.charAt(0).toUpperCase() + accountType.slice(1)} registered!`);
+        loadBusiness();
       }).catch(err => alert(err.message));
     });
 
-    // Edit restaurant form
-    document.getElementById("editRestaurantForm").addEventListener('submit', e => {
+    // Edit business form
+    document.getElementById("editBusinessForm").addEventListener('submit', e => {
       e.preventDefault();
-      const name = document.getElementById("editRestaurantName").value.trim();
-      const image = document.getElementById("editRestaurantImage").value.trim();
-      const description = document.getElementById("editRestaurantDescription").value.trim();
-      const location = document.getElementById("editRestaurantLocation").value.trim();
-      const category = document.getElementById("editRestaurantCategory").value.trim();
-      const deliveryFee = parseFloat(document.getElementById("editRestaurantDeliveryFee").value);
-      const isAvailable = document.getElementById("editRestaurantIsAvailable").checked;
+      const name = document.getElementById("editBusinessName").value.trim();
+      const image = document.getElementById("editBusinessImage").value.trim();
+      const description = document.getElementById("editBusinessDescription").value.trim();
+      const location = document.getElementById("editBusinessLocation").value.trim();
+      const category = document.getElementById("editBusinessCategory").value.trim();
+      const deliveryFee = parseFloat(document.getElementById("editBusinessDeliveryFee").value);
+      const isAvailable = document.getElementById("editBusinessIsAvailable").checked;
 
       if (!name || !image || !description || !location || !category || isNaN(deliveryFee)) {
         alert("Please fill all fields correctly.");
         return;
       }
 
-      update(ref(db, `restaurants/${currentUserId}`), {
+      const businessRef = accountType === "restaurant" ? "restaurants" : "shops";
+      update(ref(db, `${businessRef}/${currentUserId}`), {
         name, image, description, location, category, deliveryFee, isAvailable
       }).then(() => {
-        toast("Restaurant details updated!");
-        loadRestaurant();
+        toast(`${accountType.charAt(0).toUpperCase() + accountType.slice(1)} details updated!`);
+        loadBusiness();
       }).catch(err => alert(err.message));
     });
 
-    // Populate edit restaurant form
-    function populateEditRestaurantForm(data) {
-      document.getElementById("editRestaurantName").value = data.name;
-      document.getElementById("editRestaurantImage").value = data.image;
-      document.getElementById("editRestaurantDescription").value = data.description;
-      document.getElementById("editRestaurantLocation").value = data.location;
-      document.getElementById("editRestaurantCategory").value = data.category || '';
-      document.getElementById("editRestaurantDeliveryFee").value = data.deliveryFee || 20.00;
-      document.getElementById("editRestaurantIsAvailable").checked = data.isAvailable !== false;
+    // Populate edit business form
+    function populateEditBusinessForm(data) {
+      document.getElementById("editBusinessName").value = data.name;
+      document.getElementById("editBusinessImage").value = data.image;
+      document.getElementById("editBusinessDescription").value = data.description;
+      document.getElementById("editBusinessLocation").value = data.location;
+      document.getElementById("editBusinessCategory").value = data.category || '';
+      document.getElementById("editBusinessDeliveryFee").value = data.deliveryFee || 20.00;
+      document.getElementById("editBusinessIsAvailable").checked = data.isAvailable !== false;
     }
 
-    // Display restaurant info above menu
-    function displayRestaurantInfo(data) {
-      const infoDiv = document.getElementById("restaurantInfo");
+    // Display business info above menu
+    function displayBusinessInfo(data) {
+      const infoDiv = document.getElementById("businessInfo");
       infoDiv.innerHTML = `
         <h2 class="text-2xl font-bold mb-2">${data.name}</h2>
-        <img src="${data.image}" alt="Restaurant Image" class="w-full max-w-xs rounded mb-2" />
+        <img src="${data.image}" alt="Business Image" class="w-full max-w-xs rounded mb-2" />
         <p class="mb-1">${data.description}</p>
         <p class="text-gray-600"><strong>Location:</strong> ${data.location}</p>
         <p class="text-gray-600"><strong>Category:</strong> ${data.category || 'Not set'}</p>
@@ -307,11 +324,11 @@
         return;
       }
 
-      const menuRef = ref(db, `restaurants/${currentUserId}/menu`);
+      const menuRef = ref(db, `${accountType === "restaurant" ? "restaurants" : "shops"}/${currentUserId}/menu`);
       push(menuRef, {
         name, price, category, image, description, isAvailable
       }).then(() => {
-        toast("Menu item added!");
+        toast("Item added!");
         document.getElementById("addMenuForm").reset();
         document.getElementById("itemIsAvailable").checked = true;
       }).catch(err => alert(err.message));
@@ -322,7 +339,7 @@
     const searchMenuInput = document.getElementById("searchMenu");
 
     function loadMenuItems() {
-      const menuRef = ref(db, `restaurants/${currentUserId}/menu`);
+      const menuRef = ref(db, `${accountType === "restaurant" ? "restaurants" : "shops"}/${currentUserId}/menu`);
       onValue(menuRef, (snapshot) => {
         const data = snapshot.val();
         displayMenuItems(data);
@@ -341,7 +358,7 @@
       );
 
       if (filteredItems.length === 0) {
-        menuItemsList.innerHTML = `<p class="text-center text-gray-500">No menu items found.</p>`;
+        menuItemsList.innerHTML = `<p class="text-center text-gray-500">No items found.</p>`;
         return;
       }
 
@@ -375,11 +392,11 @@
 
     // Toggle menu item availability
     function toggleAvailability(itemId) {
-      const itemRef = ref(db, `restaurants/${currentUserId}/menu/${itemId}`);
-      onValue(itemRef, (snapshot) => {
+      const menuRef = ref(db, `${accountType === "restaurant" ? "restaurants" : "shops"}/${currentUserId}/menu/${itemId}`);
+      onValue(menuRef, (snapshot) => {
         const data = snapshot.val();
         if (data) {
-          update(itemRef, { isAvailable: !data.isAvailable });
+          update(menuRef, { isAvailable: !data.isAvailable });
         }
       }, { onlyOnce: true });
     }
