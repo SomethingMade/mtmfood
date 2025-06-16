@@ -165,7 +165,15 @@
         const snapshot = await userRef.get();
 
         if (snapshot.exists() && snapshot.val().accountType === "business") {
-          window.location.href = "admin.html";
+          const storeType = snapshot.val().storeType; // Get store type (e.g., "restaurant" or "shop")
+          if (storeType === "restaurant") {
+            window.location.href = "restaurant_admin.html";
+          } else if (storeType === "shop") {
+            window.location.href = "shop_admin.html";
+          } else {
+            loginError.textContent = "Invalid store type. Contact support.";
+            await auth.signOut();
+          }
         } else {
           loginError.textContent = "Access denied. You must be a business account.";
           await auth.signOut();
@@ -176,6 +184,6 @@
         spinnerOverlay.classList.add("hidden");
       }
     });
-  </ scriptural>
+  </script>
 </body>
 </html>
