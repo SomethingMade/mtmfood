@@ -150,6 +150,7 @@
 
     let currentUserId = null;
     let accountType = null;
+    let businessNode = null; // Track the correct business node
     let orderChart = null;
 
     // Toast helper
@@ -185,6 +186,7 @@
       } else {
         currentUserId = null;
         accountType = null;
+        businessNode = null;
         document.getElementById("loginSection").style.display = "block";
         document.getElementById("businessSection").style.display = "none";
         document.getElementById("editBusinessSection").style.display = "none";
@@ -210,17 +212,34 @@
 
     // Load business info or registration form
     function loadBusiness() {
-      const businessRef = ref(db, `${accountType === "restaurant" ? "restaurants" : "shops"}/${currentUserId}`);
-      onValue(businessRef, (snapshot) => {
-        const data = snapshot.val();
-        if (data) {
+      const restaurantsRef = ref(db, `restaurants/${currentUserId}`);
+      const shopsRef = ref(db, `shops/${currentUserId}`);
+
+      Promise.all([
+        new Promise(resolve => onValue(restaurantsRef, (snapshot) => resolve(snapshot.val()), { onlyOnce: true })),
+        new Promise(resolve => onValue(shopsRef, (snapshot) => resolve(snapshot.val()), { onlyOnce: true }))
+      ]).then(([restaurantData, shopData]) => {
+        if (restaurantData) {
+          businessNode = "restaurants";
           document.getElementById("businessSection").style.display = "none";
           document.getElementById("editBusinessSection").style.display = "block";
           document.getElementById("menuSection").style.display = "block";
           document.getElementById("ordersSection").style.display = "block";
           document.getElementById("dashboardSection").style.display = "block";
-          displayBusinessInfo(data);
-          populateEditBusinessForm(data);
+          displayBusinessInfo(restaurantData);
+          populateEditBusinessForm(restaurantData);
+          loadMenuItems();
+          loadOrders();
+          loadDashboardStats();
+        } else if (shopData) {
+          businessNode = "shops";
+          document.getElementById("businessSection").style.display = "none";
+          document.getElementById("editBusinessSection").style.display = "block";
+          document.getElementById("menuSection").style.display = "block";
+          document.getElementById("ordersSection").style.display = "block";
+          document.getElementById("dashboardSection").style.display = "block";
+          displayBusinessInfo(shopData);
+          populateEditBusinessForm(shopData);
           loadMenuItems();
           loadOrders();
           loadDashboardStats();
@@ -231,7 +250,7 @@
           document.getElementById("ordersSection").style.display = "none";
           document.getElementById("dashboardSection").style.display = "none";
         }
-      }, { onlyOnce: true });
+      });
     }
 
     // Register business form
@@ -275,8 +294,12 @@
         return;
       }
 
-      const businessRef = accountType === "restaurant" ? "restaurants" : "shops";
-      update(ref(db, `${businessRef}/${currentUserId}`), {
+      if (!businessNode) {
+        alert("Business node not determined. Please register your business first.");
+        return;
+      }
+
+      update(ref(db, `${businessNode}/${currentUserId}`), {
         name, image, description, location, category, deliveryFee, isAvailable
       }).then(() => {
         toast(`${accountType.charAt(0).toUpperCase() + accountType.slice(1)} details updated!`);
@@ -324,7 +347,7 @@
         return;
       }
 
-      const menuRef = ref(db, `${accountType === "restaurant" ? "restaurants" : "shops"}/${currentUserId}/menu`);
+      const menuRef = ref(db, `${businessNode}/${currentUserId}/menu`);
       push(menuRef, {
         name, price, category, image, description, isAvailable
       }).then(() => {
@@ -339,7 +362,7 @@
     const searchMenuInput = document.getElementById("searchMenu");
 
     function loadMenuItems() {
-      const menuRef = ref(db, `${accountType === "restaurant" ? "restaurants" : "shops"}/${currentUserId}/menu`);
+      const menuRef = ref(db, `${businessNode}/${currentUserId}/menu`);
       onValue(menuRef, (snapshot) => {
         const data = snapshot.val();
         displayMenuItems(data);
@@ -392,7 +415,7 @@
 
     // Toggle menu item availability
     function toggleAvailability(itemId) {
-      const menuRef = ref(db, `${accountType === "restaurant" ? "restaurants" : "shops"}/${currentUserId}/menu/${itemId}`);
+      const menuRef = ref(db, `${businessNode}/${currentUserId}/menu/${itemId}`);
       onValue(menuRef, (snapshot) => {
         const data = snapshot.val();
         if (data) {
