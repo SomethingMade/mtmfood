@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>List Your Business | My Two Minutes Food</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
@@ -263,13 +263,23 @@
         const result = await auth.createUserWithEmailAndPassword(email, password);
         const uid = result.user.uid;
 
+        // Save user data
         await db.ref("users/" + uid).set({
           accountType: "business",
           email: email
         });
 
-        const businessRef = businessType === "restaurant" ? "restaurants" : "shops";
-        await db.ref(`${businessRef}/${uid}`).set({
+        // Determine the correct node and save business data
+        let businessRef;
+        if (businessType === "restaurant") {
+          businessRef = db.ref("restaurants/" + uid);
+        } else if (businessType === "shop") {
+          businessRef = db.ref("shops/" + uid);
+        } else {
+          throw new Error("Invalid business type selected.");
+        }
+
+        await businessRef.set({
           businessName,
           location,
           description,
